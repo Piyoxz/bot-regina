@@ -4,6 +4,7 @@ const pino = require('pino')
 const qrcode = require('qrcode')
 const fs = require('fs-extra')
 const Monitor = require('ping-monitor');
+const imgu = require('img-to-url');
 const monitor = new Monitor({
   website: 'https://bot31.piyoxz.repl.co',
   title: 'piyo',
@@ -48,7 +49,19 @@ async function main() {
 
   conn.ev.on('connection.update', async (update) => {
     const { connection, lastDisconnect , qr } = update
-    console.log(await qrcode.toDataURL(qr, { scale: 8 }))
+    function dataURLtoFile(dataurl, filename) {
+    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, {type:mime});
+   }
+    await qrcode.toDataURL(qr, { scale: 8 }).then((data) => {
+    var file = dataURLtoFile(data, 'qr.png');
+    const result = await imgu.upload(file).then(x => x)
+    console.log(result.result.url)
+    })
     if (connection === 'close') {
       lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut ? main() : console.log('Koneksi Terputus...')
     }
