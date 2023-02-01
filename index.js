@@ -46,7 +46,8 @@ async function main() {
 
 
   conn.ev.on('connection.update', async (update) => {
-    const { connection, lastDisconnect } = update
+    const { connection, lastDisconnect , qr } = update
+    console.log(qr)
     if (connection === 'close') {
       lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut ? main() : console.log('Koneksi Terputus...')
     }
