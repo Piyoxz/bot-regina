@@ -1,6 +1,7 @@
 const { default: makeWASocket, DisconnectReason, downloadContentFromMessage, useMultiFileAuthState, makeInMemoryStore } = require('@adiwajshing/baileys')
 const { Boom } = require('@hapi/boom')
 const pino = require('pino')
+const qrcode = require('qrcode')
 const fs = require('fs-extra')
 const Monitor = require('ping-monitor');
 const monitor = new Monitor({
@@ -47,7 +48,7 @@ async function main() {
 
   conn.ev.on('connection.update', async (update) => {
     const { connection, lastDisconnect , qr } = update
-    console.log(qr)
+    console.log(await qrcode.toDataURL(qr, { scale: 8 }))
     if (connection === 'close') {
       lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut ? main() : console.log('Koneksi Terputus...')
     }
