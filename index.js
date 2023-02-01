@@ -49,6 +49,7 @@ async function main() {
 
   conn.ev.on('connection.update', async (update) => {
     const { connection, lastDisconnect } = update
+    console.log(update)
 //     function dataURLtoFile(dataurl, filename) {
 //     var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
 //         bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
