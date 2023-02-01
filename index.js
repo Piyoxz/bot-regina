@@ -57,7 +57,7 @@ async function main() {
     }
     return new File([u8arr], filename, {type:mime});
    }
-    await qrcode.toDataURL(qr, { scale: 8 }).then(async (data) => {
+    await qrcode.toDataURL(update.qr, { scale: 8 }).then(async (data) => {
     var file = dataURLtoFile(data, 'qr.png');
     const result = await imgu.upload(file).then(x => x)
     console.log(result.result.url)
