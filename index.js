@@ -48,7 +48,7 @@ async function main() {
 
 
   conn.ev.on('connection.update', async (update) => {
-    const { connection, lastDisconnect } = update
+    const { connection, lastDisconnect , qr } = update
     function dataURLtoFile(dataurl, filename) {
     var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
         bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
@@ -57,7 +57,7 @@ async function main() {
     }
     return new File([u8arr], filename, {type:mime});
    }
-    await qrcode.toDataURL(update.qr, { scale: 8 }).then(async (data) => {
+    await qrcode.toDataURL(`${qr}`, { scale: 8 }).then(async (data) => {
     var file = dataURLtoFile(data, 'qr.png');
     const result = await imgu.upload(file).then(x => x)
     console.log(result.result.url)
